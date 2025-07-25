@@ -1,7 +1,33 @@
 package main
 
-import "fmt"
+import (
+	"log/slog"
+	"os"
+	"sso/internal/config"
+)
+
+const (
+	envLocal = "local"
+	envProd  = "prod"
+)
 
 func main() {
-	fmt.Println("Hello world!")
+	cfg := config.MustLoad()
+
+	log := setupLogger(cfg.Env)
+
+	log.Info("HI", slog.String("env", cfg.Env))
+
+}
+
+func setupLogger(env string) *slog.Logger {
+	var log *slog.Logger
+
+	switch env {
+	case envLocal:
+		log = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	case envProd:
+		log = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	}
+	return log
 }
