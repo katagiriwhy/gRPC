@@ -1,4 +1,4 @@
-module github.com/katagiriwhy/gRPC/protos/sso
+module github.com/katagiriwhy/gRPC/sso
 
 go 1.23.3
 
